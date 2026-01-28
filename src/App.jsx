@@ -12,6 +12,12 @@ import Layout from './components/Layout'
 import { Routes, Route } from 'react-router-dom'
 import RequireAuth from './components/RequireAuth'
 
+const ROLES = {
+  user: "ROLE_USER",
+  editor: "ROLE_EDITOR",
+  admin: "ROLE_ADMIN"
+}
+
 function App() {
 
   return (
@@ -24,10 +30,16 @@ function App() {
         <Route path="unauthorized" element={<Unauthorized />} />
 
         {/* protected routes */}
-        <Route element={<RequireAuth />}>
+        <Route element={<RequireAuth allowedRoles={[ROLES.user, ROLES.admin, ROLES.editor]} />}>
           <Route path="/" element={<Home />} />
+        </Route>
+        <Route element={<RequireAuth allowedRoles={[ROLES.editor]} />}>
           <Route path="editor" element={<Editor />} />
+        </Route>
+        <Route element={<RequireAuth allowedRoles={[ROLES.admin]} />}>
           <Route path="admin" element={<Admin />} />
+        </Route>
+        <Route element={<RequireAuth allowedRoles={[ROLES.editor, ROLES.admin]} />}>
           <Route path="lounge" element={<Lounge />} />
         </Route>
 
